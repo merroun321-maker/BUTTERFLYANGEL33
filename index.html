@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For Kareen 💖</title>
+  <style>
+    body {
+      margin: 0;
+      background: radial-gradient(ellipse at bottom, #0b0c2a 0%, #000010 100%);
+      font-family: 'Press Start 2P', cursive;
+      color: #3a2d2d;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      image-rendering: pixelated;
+    }
+
+    h1 {
+      margin-top: 40px;
+      font-size: 24px;
+      color: #ffffff;
+      text-shadow: 0 0 8px #ffffff, 0 0 16px #ffffff, 0 0 24px #ffccff;
+    }
+
+    .wing {
+      display: inline-block;
+      font-size: 24px;
+      animation: flap 1s infinite;
+    }
+
+    .wing.right {
+      transform: scaleX(-1);
+    }
+
+    @keyframes flap {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(15deg); }
+    }
+
+    #text-box {
+      margin: 20px auto;
+      width: 80%;
+      max-height: 40vh;   /* limit height */
+      overflow-y: auto;   /* scroll if too long */
+      font-size: 14px;
+      line-height: 1.6;
+      background: rgba(255,255,255,0.6);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px #999;
+    }
+
+    /* Keep arrows visible */
+    .arrows {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .arrow-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+      display: inline-block;
+      margin: 0 15px;
+    }
+
+    .arrow-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 4px;
+      background: #fff;
+      box-shadow: 0 0 4px #fff, 0 0 8px #fff, 0 0 12px #fff;
+      transform: translate(-50%, -50%);
+      transition: all 0.2s;
+    }
+
+    .arrow-btn.left::after,
+    .arrow-btn.right::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 10px;
+      height: 4px;
+      background: #fff;
+      box-shadow: 0 0 4px #fff, 0 0 8px #fff;
+      transform: translate(-50%, -50%) rotate(0deg);
+      transition: all 0.2s;
+    }
+
+    .arrow-btn.left::after {
+      transform: translate(-50%, -50%) rotate(135deg);
+    }
+
+    .arrow-btn.right::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    .arrow-btn:hover::before,
+    .arrow-btn:hover::after {
+      box-shadow: 0 0 8px #fff, 0 0 16px #fff, 0 0 24px #fff;
+    }
+
+    #question {
+      display: none;
+      margin-top: 40px;
+    }
+
+    #question h2 {
+      color: white;
+      text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #ffccff;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      font-size: 14px;
+      margin: 10px;
+      cursor: pointer;
+      border: 2px solid #5c374c;
+      background: #fff;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starfield"></canvas>
+
+  <h1><span class="wing">🪽</span> Kareen <span class="wing right">🪽</span></h1>
+
+  <div id="text-box"></div>
+  <div class="arrows">
+    <button class="arrow-btn left" onclick="prevParagraph()"></button>
+    <button class="arrow-btn right" onclick="nextParagraph()"></button>
+  </div>
+
+  <div id="question">
+    <h2>Do you want to be my girlfriend? 💖</h2>
+    <button class="btn" onclick="alert('You belong to me and you\'re mine, until the day you die and even afterwards as ghosts and souls up in the sky🦋')">
+      YES
+    </button>
+    <button class="btn" onclick="alert('my forever slut 🫩🫂')">
+      Absolutely Yes Daddy
+    </button>
+    <button id="noBtn" class="btn">NO</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("starfield");
+    const ctx = canvas.getContext("2d");
+    const box = document.getElementById("text-box");
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    const starShapes = [
+      [ [0,1,0], [1,1,1], [0,1,0] ],
+      [ [0,1,0], [1,1,1], [0,1,0] ],
+      [ [1,0,1], [0,1,0], [1,0,1] ]
+    ];
+
+    const colors = ["white", "yellow", "lightblue", "pink", "lightgreen"];
+
+    class PixelStar {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        const safeTop = 120;
+        const safeBoxTop = box.offsetTop - 20;
+        const safeBoxBottom = box.offsetTop + box.offsetHeight + 20;
+        do { this.y = Math.random() * canvas.height; } 
+        while (this.y > safeTop && this.y > safeBoxTop && this.y < safeBoxBottom);
+        this.size = 2 + Math.random() * 2;
+        this.shape = starShapes[Math.floor(Math.random() * starShapes.length)];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.alpha = Math.random();
+        this.twinkle = Math.random() * 0.02 + 0.01;
+        this.speedY = Math.random() * 0.05;
+      }
+      draw() {
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        const s = this.size;
+        for (let row = 0; row < this.shape.length; row++)
+          for (let col = 0; col < this.shape[row].length; col++)
+            if (this.shape[row][col] === 1)
+              ctx.fillRect(this.x + col*s, this.y + row*s, s, s);
+        ctx.globalAlpha = 1;
+      }
+      update() {
+        this.alpha += (Math.random() > 0.5 ? this.twinkle : -this.twinkle);
+        if(this.alpha<0.3)this.alpha=0.3;
+        if(this.alpha>1)this.alpha=1;
+        this.y+=this.speedY;
+        if(this.y>canvas.height)this.y=0;
+        this.draw();
+      }
+    }
+
+    const stars = [];
+    for(let i=0;i<60;i++) stars.push(new PixelStar());
+    function animate() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      stars.forEach(star=>star.update());
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    const paragraphs = [
+      "To the love of my life, My Queen, My other half, my woman, My Angel. I love you with every atom of my being, you literally bewitched me, body and soul since the first day I met you, and ive been melting in you ever since. Im not a very fortune guy and I’ve been thrown to darkness but you always been literally that shinning star, that savor angel, the light of my life, you make every day a little more easier, you give me hope and im forever grateful and devoted to you bubu ❤‍🩹🤍.",
+      "You make my world brighter than the stars ✨",
+      "Every moment with you feels like magic 🌙",
+      "Now, I have one important question..."
+    ];
+    let index = 0;
+    const questionBox = document.getElementById("question");
+    box.innerHTML = paragraphs[index];
+
+    function nextParagraph() {
+      if(index<paragraphs.length-1){
+        index++;
+        box.innerHTML = paragraphs[index];
+      } else {
+        box.style.display="none";
+        document.querySelector(".arrows").style.display="none";
+        questionBox.style.display="block";
+      }
+    }
+
+    function prevParagraph() {
+      if(index>0){
+        index--;
+        box.innerHTML = paragraphs[index];
+      }
+    }
+
+    const noBtn = document.getElementById("noBtn");
+    noBtn.addEventListener("mouseover", function(){
+      const x=Math.random()*(window.innerWidth-100);
+      const y=Math.random()*(window.innerHeight-50);
+      noBtn.style.position="absolute";
+      noBtn.style.left=x+"px";
+      noBtn.style.top=y+"px";
+    });
+  </script>
+</body>
+</html>
