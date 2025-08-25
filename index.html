@@ -4,8 +4,15 @@
   <meta charset="UTF-8">
   <title>For Kareen 💖</title>
   <style>
-    body {
+    html, body {
+      height: 100%;
+      width: 100%;
       margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    body {
       background: radial-gradient(ellipse at bottom, #0b0c2a 0%, #000010 100%);
       font-family: 'Press Start 2P', cursive;
       color: #3a2d2d;
@@ -45,15 +52,18 @@
 
     #text-box {
       margin: 20px auto;
-      width: 80%;
-      max-height: 40vh;   /* limit height */
-      overflow-y: auto;   /* scroll if too long */
-      font-size: 14px;
+      width: 90%;
+      max-width: 600px;
+      max-height: 50vh;
+      overflow-y: auto;
+      font-size: 16px;
       line-height: 1.6;
-      background: rgba(255,255,255,0.6);
-      padding: 15px;
+      background: rgba(255,255,255,0.8);
+      color: black;
+      padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 8px #999;
+      word-wrap: break-word;
     }
 
     /* Keep arrows visible */
@@ -102,13 +112,8 @@
       transition: all 0.2s;
     }
 
-    .arrow-btn.left::after {
-      transform: translate(-50%, -50%) rotate(135deg);
-    }
-
-    .arrow-btn.right::after {
-      transform: translate(-50%, -50%) rotate(-45deg);
-    }
+    .arrow-btn.left::after { transform: translate(-50%, -50%) rotate(135deg); }
+    .arrow-btn.right::after { transform: translate(-50%, -50%) rotate(-45deg); }
 
     .arrow-btn:hover::before,
     .arrow-btn:hover::after {
@@ -133,6 +138,19 @@
       border: 2px solid #5c374c;
       background: #fff;
       border-radius: 8px;
+    }
+
+    /* Make it responsive for smaller screens */
+    @media (max-width: 480px) {
+      #text-box {
+        font-size: 14px;
+        padding: 15px;
+        max-height: 55vh;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
     }
   </style>
 </head>
@@ -236,28 +254,3 @@
       if(index<paragraphs.length-1){
         index++;
         box.innerHTML = paragraphs[index];
-      } else {
-        box.style.display="none";
-        document.querySelector(".arrows").style.display="none";
-        questionBox.style.display="block";
-      }
-    }
-
-    function prevParagraph() {
-      if(index>0){
-        index--;
-        box.innerHTML = paragraphs[index];
-      }
-    }
-
-    const noBtn = document.getElementById("noBtn");
-    noBtn.addEventListener("mouseover", function(){
-      const x=Math.random()*(window.innerWidth-100);
-      const y=Math.random()*(window.innerHeight-50);
-      noBtn.style.position="absolute";
-      noBtn.style.left=x+"px";
-      noBtn.style.top=y+"px";
-    });
-  </script>
-</body>
-</html>
